@@ -1,8 +1,8 @@
-## Week 1 — Day 1 & Day 2 學習筆記
+# Week 1 — Day 1 & Day 2 學習筆記
 
 ---
 
-### Import — 取用工具
+## Import — 取用工具
 
 ```python
 import requests
@@ -23,7 +23,7 @@ import logging
 
 ---
 
-### URL 宣告
+## URL 宣告
 
 ```python
 url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
@@ -33,7 +33,30 @@ url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
 
 ---
 
-### 解析 API 資料
+## 獲取 API 資料
+
+```python
+response = requests.get(url, timeout=10)
+response.raise_for_status()
+```
+
+- `requests.get(url)` — 用 GET 方式發送請求到那個網址
+- `timeout=10` — 如果 10 秒內對方沒回應，就放棄，不要一直等
+- `response` — 把對方回傳的東西（狀態碼 + 資料）存進這個變數
+
+`raise_for_status()` 負責檢查對方回應是不是成功的。API 回應了不代表成功，HTTP 有狀態碼：
+
+| 狀態碼 | 意思 |
+|--------|------|
+| `200` | 成功 |
+| `404` | 找不到這個資源 |
+| `500` | 對方伺服器出錯 |
+
+這行的意思是「如果狀態碼不是 200，主動丟出錯誤」，讓下面的 `except HTTPError` 接住。不寫這行的話，404 或 500 也會被當成成功，你拿到一個失敗的回應卻不知道。
+
+---
+
+## 解析 API 資料
 
 ```python
 data = response.json()
@@ -45,7 +68,7 @@ price = data["data"]["amount"]
 
 ---
 
-### 寫入 CSV
+## 寫入 CSV
 
 ```python
 with open("result.csv", "w", newline="") as f:
@@ -62,7 +85,7 @@ with open("result.csv", "w", newline="") as f:
 
 ---
 
-### try / except — 讓程式出錯不會死掉
+## try / except — 讓程式出錯不會死掉
 
 ```python
 try:
@@ -86,7 +109,7 @@ except Exception as e:
 
 ---
 
-### logging — 記錄程式的操作內容
+## logging — 記錄程式的操作內容
 
 ```python
 logging.basicConfig(
@@ -121,9 +144,38 @@ logging.basicConfig(
 
 ---
 
-### Terminal 指令
+## Git 指令
+
+| 指令 | 用途 |
+|------|------|
+| `git add .` | 把所有變更加入暫存區（`add` 和 `.` 中間要有空格）|
+| `git add 檔案名稱` | 只加入特定檔案 |
+| `git commit -m "訊息"` | 把暫存區的變更存成一個版本 |
+| `git push` | 把本地的版本推上 GitHub |
+| `git pull` | 把 GitHub 上的版本拉下來同步 |
+
+---
+
+## Terminal 指令
 
 | 指令 | 用途 |
 |------|------|
 | `pip3 install requests` | 讓 venv 環境安裝 requests（`pip` 無法使用時改用 `pip3`）|
 | `cat 檔案名稱` | 在終端機確認某個檔案的內容 |
+| `cd ..` | 回到上一層資料夾 |
+| `cd 資料夾名稱` | 進入該資料夾 |
+
+**路徑觀念：** 在哪個資料夾下指令，就只會影響那個資料夾裡的檔案。`git add` 只會抓到你目前所在資料夾的檔案，要先確認自己在對的位置。
+
+---
+
+## vim 編輯器
+
+Git merge 時會自動開啟 vim，離開方式：
+
+```
+Esc → :wq → Enter
+```
+
+- `Esc` — 離開編輯模式
+- `:wq` — 儲存並離開（write + quit）
