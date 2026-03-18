@@ -11,20 +11,21 @@ A hands-on 8-week self-training project building toward a Junior Prompt Engineer
 
 ## Weekly Progress
 
-| Week | Theme | Status |
-|------|-------|--------|
-| Week 1 | Python basics — API calls, CSV, logging | ✅ In progress |
-| Week 2 | Automation — scrapers, schedulers, notifications | ⬜ Upcoming |
-| Week 3 | Prompt engineering — template library | ⬜ Upcoming |
-| Week 4 | AI output validation and project spec design | ⬜ Upcoming |
-| Week 5 | Core project: data ingestion and condition engine | ⬜ Upcoming |
-| Week 6 | Core project: alert system and Linux deployment | ⬜ Upcoming |
-| Week 7 | Portfolio cleanup and resume update | ⬜ Upcoming |
-| Week 8 | Interview prep and application | ⬜ Upcoming |
+| Week   | Theme                                             | Status         |
+| ------ | ------------------------------------------------- | -------------- |
+| Week 1 | Python basics — API calls, CSV, logging           | ✅ In progress |
+| Week 2 | Automation — scrapers, schedulers, notifications  | ⬜ Upcoming    |
+| Week 3 | Prompt engineering — template library             | ⬜ Upcoming    |
+| Week 4 | AI output validation and project spec design      | ⬜ Upcoming    |
+| Week 5 | Core project: data ingestion and condition engine | ⬜ Upcoming    |
+| Week 6 | Core project: alert system and Linux deployment   | ⬜ Upcoming    |
+| Week 7 | Portfolio cleanup and resume update               | ⬜ Upcoming    |
+| Week 8 | Interview prep and application                    | ⬜ Upcoming    |
 
 ## Weekly Deliverables
 
 ### Week 1
+
 - `fetch_rate.py` — Fetches live BTC/USD price from Coinbase API and saves to CSV
 
 ## Tech Stack
@@ -36,9 +37,17 @@ A hands-on 8-week self-training project building toward a Junior Prompt Engineer
 ## What I Learned
 
 ### Week 1 — Day 1
+
 - Set up Python virtual environment (venv) from scratch
 - Made first API call using `requests` library
 - Read and understood error tracebacks independently
 - Switched to a working API when the original one was down
 - Saved structured data to CSV
 - Set up Git and pushed to GitHub with a clean folder structure
+
+### Week 1 — Day 2
+
+- Added try/except error handling for network and HTTP errors
+- Replaced all print() with logging module
+- Log outputs to both terminal and fetch.log simultaneously
+- Learned that basicConfig must be set before any logging calls
