@@ -19,8 +19,11 @@ with open("result.csv", "w", newline="") as f:
   writer = csv.writer(f)
   writer.writerow(["時間", "價格"])
 
+last_price = None
 
 def job():
+  global last_price
+
   url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
 
   try:
@@ -42,6 +45,14 @@ def job():
     logging.error(f"API 錯誤：{e}")
   except Exception as e:
     logging.error(f"未知錯誤：{e}")
+    return
+
+  if last_price is not None:
+    change = abs(float(price) - float(last_price)) / float(last_price)
+    if change > 0.01:
+      logging.warning(f"價格異動超過 1%! {last_price} -> {price}")
+
+  last_price = price
 
 
 schedule.every(5).minutes.do(job)
