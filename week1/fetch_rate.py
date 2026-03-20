@@ -1,7 +1,10 @@
+import schedule
+import time
 import requests
 import csv
 import logging
 from datetime import datetime
+
 
 logging.basicConfig(
   level=logging.INFO,
@@ -12,28 +15,40 @@ logging.basicConfig(
   ]
 )
 
+with open("result.csv", "w", newline="") as f:
+  writer = csv.writer(f)
+  writer.writerow(["時間", "價格"])
 
-url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
 
-try:
-  response = requests.get(url, timeout=10)
-  response.raise_for_status()
+def job():
+  url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
 
-  data = response.json()
-  price = data["data"]["amount"]
+  try:
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
 
-  with open("result.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(["時間", "價格"])
-    writer.writerow([datetime.now(), price])
+    data = response.json()
+    price = data["data"]["amount"]
 
-  logging.info(f"完成！價格：{price}")
+    with open("result.csv", "a", newline="") as f:
+      writer = csv.writer(f)
+      writer.writerow([datetime.now(), price])
 
-except requests.exceptions.ConnectionError:
-  logging.error("連線錯誤，請確認連線狀態")
-except requests.exceptions.HTTPError as e:
-  logging.error(f"API 錯誤：{e}")
-except Exception as e:
-  logging.error(f"未知錯誤：{e}")
+    logging.info(f"完成！價格：{price}")
+
+  except requests.exceptions.ConnectionError:
+    logging.error("連線錯誤，請確認連線狀態")
+  except requests.exceptions.HTTPError as e:
+    logging.error(f"API 錯誤：{e}")
+  except Exception as e:
+    logging.error(f"未知錯誤：{e}")
+
+
+schedule.every(5).minutes.do(job)
+
+while True:
+  schedule.run_pending()
+  time.sleep(1)
+
 
 
