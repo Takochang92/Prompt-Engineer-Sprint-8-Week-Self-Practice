@@ -1,74 +1,25 @@
-# Week 1 — Day 1 & Day 2 學習筆記
+# Learning Note — Prompt Engineer Sprint
 
 ---
 
-## Import — 取用工具
+## Week 1 · Day 1
 
-```python
-import requests
-import csv
-from datetime import datetime
-import logging
+### venv 虛擬環境
+
+```bash
+python3 -m venv venv        # 建立虛擬環境
+source venv/bin/activate    # 啟動虛擬環境
+deactivate                  # 關閉虛擬環境
 ```
 
-- `import xxx` — 取用 Python 內建或安裝的工具
-- `from xxx import ooo` — 取用 xxx 模組中的 ooo 功能
-
-| 工具 | 用途 |
-|------|------|
-| `requests` | 取用 requests 功能，進行 API 操作 |
-| `csv` | 取用 csv 功能，進行 csv 檔案的讀寫與儲存 |
-| `from datetime import datetime` | 取用 datetime 模組中的 datetime 功能，獲得時間（模組名稱沒有 s）|
-| `logging` | 取用 logging 功能，將結果記錄在檔案中，取代 print。因為 print 只會印在終端機，程式關掉就消失 |
+- 每個專案獨立安裝套件，不會互相干擾
+- 啟動後 Terminal 前面會出現 `(venv)` 字樣
 
 ---
 
-## URL 宣告
+## Week 1 · Day 2
 
-```python
-url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
-```
-
-寫在最上面先宣告，後續程式碼都可以用 `url` 代稱，不用每次貼完整網址。
-
----
-
-## 獲取 API 資料
-
-```python
-response = requests.get(url, timeout=10)
-response.raise_for_status()
-```
-
-- `requests.get(url)` — 用 GET 方式發送請求到那個網址
-- `timeout=10` — 如果 10 秒內對方沒回應，就放棄，不要一直等
-- `response` — 把對方回傳的東西（狀態碼 + 資料）存進這個變數
-
-`raise_for_status()` 負責檢查對方回應是不是成功的。API 回應了不代表成功，HTTP 有狀態碼：
-
-| 狀態碼 | 意思 |
-|--------|------|
-| `200` | 成功 |
-| `404` | 找不到這個資源 |
-| `500` | 對方伺服器出錯 |
-
-這行的意思是「如果狀態碼不是 200，主動丟出錯誤」，讓下面的 `except HTTPError` 接住。不寫這行的話，404 或 500 也會被當成成功，你拿到一個失敗的回應卻不知道。
-
----
-
-## 解析 API 資料
-
-```python
-data = response.json()
-price = data["data"]["amount"]
-```
-
-- `response.json()` — 將 API 回傳的 JSON 資料轉成 Python 可以操作的字典格式
-- `data["data"]["amount"]` — 從字典中取出價格，路徑依照每個資料來源的結構而不同
-
----
-
-## 寫入 CSV
+### CSV 寫入
 
 ```python
 with open("result.csv", "w", newline="") as f:
@@ -85,7 +36,7 @@ with open("result.csv", "w", newline="") as f:
 
 ---
 
-## try / except — 讓程式出錯不會死掉
+### try / except — 讓程式出錯不會死掉
 
 ```python
 try:
@@ -98,7 +49,7 @@ except Exception as e:
     logging.error(f"未知錯誤：{e}")
 ```
 
-- `try` — 把**有可能出錯的程式碼**放在這裡（不是所有程式碼，import、url 宣告這些不會出錯的放外面）
+- `try` — 把**有可能出錯的程式碼**放在這裡（import、url 宣告這些不會出錯的放外面）
 - `except` — 出錯後抓住錯誤，告訴終端發生了什麼，程式不會直接死掉
 
 | except 對象 | 抓哪種錯 | 什麼情況發生 |
@@ -109,7 +60,7 @@ except Exception as e:
 
 ---
 
-## logging — 記錄程式的操作內容
+### logging — 記錄程式的操作內容
 
 ```python
 logging.basicConfig(
@@ -122,7 +73,7 @@ logging.basicConfig(
 )
 ```
 
-- `basicConfig` — 必須放在所有 logging 呼叫的**最上方**，才能讓後續的 logging 依照設定執行
+- `basicConfig` — 必須放在所有 logging 呼叫的**最上方**
 
 **level — 記錄等級**
 
@@ -144,7 +95,7 @@ logging.basicConfig(
 
 ---
 
-## Git 指令
+### Git 指令
 
 | 指令 | 用途 |
 |------|------|
@@ -156,20 +107,21 @@ logging.basicConfig(
 
 ---
 
-## Terminal 指令
+### Terminal 指令
 
 | 指令 | 用途 |
 |------|------|
-| `pip3 install requests` | 讓 venv 環境安裝 requests（`pip` 無法使用時改用 `pip3`）|
+| `pip3 install 套件名稱` | 安裝套件（`pip` 無法使用時改用 `pip3`）|
 | `cat 檔案名稱` | 在終端機確認某個檔案的內容 |
 | `cd ..` | 回到上一層資料夾 |
 | `cd 資料夾名稱` | 進入該資料夾 |
+| `tail -f 檔案名稱` | 即時監看檔案，有新內容自動顯示 |
 
-**路徑觀念：** 在哪個資料夾下指令，就只會影響那個資料夾裡的檔案。`git add` 只會抓到你目前所在資料夾的檔案，要先確認自己在對的位置。
+**路徑觀念：** 在哪個資料夾下指令，就只會影響那個資料夾裡的檔案。`source venv/bin/activate` 要在專案**根目錄**下執行。
 
 ---
 
-## vim 編輯器
+### vim 編輯器
 
 Git merge 時會自動開啟 vim，離開方式：
 
@@ -179,3 +131,72 @@ Esc → :wq → Enter
 
 - `Esc` — 離開編輯模式
 - `:wq` — 儲存並離開（write + quit）
+
+---
+
+## Week 1 · Day 3
+
+### schedule — 定時自動執行
+
+```python
+import schedule
+import time
+
+schedule.every(5).minutes.do(job)  # 每 5 分鐘執行一次 job()
+
+while True:
+    schedule.run_pending()  # 檢查有沒有到時間要執行的任務
+    time.sleep(1)           # 每秒檢查一次
+```
+
+- `schedule.every(5).minutes.do(job)` — 登記任務，每 5 分鐘跑一次
+- `while True` — 讓程式持續運行，Terminal 關掉就停了
+- `run_pending()` — 底線，不是 `run.pending()`
+
+---
+
+### CSV 兩種寫入模式
+
+| 模式 | 用途 |
+|------|------|
+| `"w"` | 覆蓋，每次重新開始，用來**寫標題列**（只執行一次） |
+| `"a"` | 累積（append），每次新增一行，用來**寫資料** |
+
+正確做法：標題列在程式啟動時用 `"w"` 寫一次，資料在 `job()` 裡用 `"a"` 累積。
+
+---
+
+### global 變數 — 在函式之間共享狀態
+
+```python
+last_price = None  # 函式外定義
+
+def job():
+    global last_price  # 宣告要使用外部的 last_price
+    ...
+    last_price = price  # 更新，下次 job() 執行時可以讀到
+```
+
+- 沒有 `global` 宣告，函式內修改的只是局部變數，外部不會改變
+
+---
+
+### 正確的啟動步驟
+
+```bash
+cd ~/projects/Prompt-Engineer-Sprint   # 1. 進到專案根目錄
+source week1/venv/bin/activate         # 2. 啟動 venv
+cd week1                               # 3. 進到 week1
+python3 fetch_rate.py                  # 4. 執行程式
+```
+
+---
+
+### 今日比喻
+
+| 指令 | 比喻 |
+|------|------|
+| `cd ~/projects/...` | 走進工作室 |
+| `source .../activate` | 開啟專用工具箱 |
+| `python3 fetch_rate.py` | 按下啟動鍵 |
+| `tail -f result.csv` | 看即時儀表板 |
