@@ -37,17 +37,21 @@ A hands-on 8-week self-training project building toward a Junior Prompt Engineer
 ## What I Learned
 
 ### Week 1 — Day 1
-
 - Set up Python virtual environment (venv) from scratch
 - Made first API call using `requests` library
 - Read and understood error tracebacks independently
 - Switched to a working API when the original one was down
 - Saved structured data to CSV
-- Set up Git and pushed to GitHub with a clean folder structure
+- Set up Git and pushed to GitHub with clean folder structure
 
 ### Week 1 — Day 2
+- Added `try/except` error handling to prevent crashes
+- Replaced `print` with `logging` module (file + terminal output)
+- Understood logging levels: DEBUG / INFO / WARNING / ERROR / CRITICAL
 
-- Added try/except error handling for network and HTTP errors
-- Replaced all print() with logging module
-- Log outputs to both terminal and fetch.log simultaneously
-- Learned that basicConfig must be set before any logging calls
+### Week 1 — Day 3
+- Used `schedule` to run job automatically every 5 minutes
+- Learned the difference between `"w"` (overwrite) and `"a"` (append) in CSV
+- Used `global` variable to share state between function calls
+- Built a price change alert: triggers `logging.warning` when BTC moves over 1%
+- Memorized correct startup sequence: root dir → activate venv → cd week1 → run script
