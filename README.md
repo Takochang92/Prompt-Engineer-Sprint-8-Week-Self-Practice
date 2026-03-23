@@ -58,9 +58,10 @@ A hands-on 8-week self-training project building toward a Junior Prompt Engineer
 
 ### Week 1 — Day 4
 - Installed `pandas` and `matplotlib` for data analysis and charting
-- Read CSV into a DataFrame and renamed columns
-- Converted string data to float using `astype(float)` for calculation
-- Plotted a line chart with `df.plot()` and saved as PNG using `plt.savefig()`
-- Learned `savefig()` vs `show()` difference, and supported export formats (PNG, PDF, SVG)
-- Formatted datetime output using `strftime()` to remove microseconds
+- Read CSV into DataFrame, renamed columns, and verified dtypes with `print(df.dtypes)`
+- Converted string to float with `astype(float)` and string to datetime with `pd.to_datetime()`
+- Added a new column using `df["漲跌"] = df["價格"].diff()`
+- Plotted a line chart with `df.plot()` and exported as PNG (`dpi=150`) and PDF
+- Learned difference between `savefig()` and `show()`
+- Learned `strftime()` format codes including `%b` for month abbreviation
 - Fixed `schedule` not running on startup by calling `job()` once before the loop

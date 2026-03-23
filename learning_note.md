@@ -202,137 +202,66 @@ python3 fetch_rate.py                  # 4. 執行程式
 | `tail -f result.csv` | 看即時儀表板 |
 
 ---
-# Week 1 · Day 4 學習筆記
+## Week 1 · Day 4 — 資料分析與視覺化
 
-## 安裝套件
+### pandas & matplotlib
 
-```bash
-pip3 install pandas matplotlib
-```
+| 套件 | 用途 |
+|------|------|
+| `pandas` | 處理表格資料 |
+| `matplotlib` | 畫圖 |
 
-- `pandas` — 處理表格資料
-- `matplotlib` — 畫圖
-
----
-
-## analyze.py 逐行說明
-
+### DataFrame 操作
 ```python
-import pandas as pd
-import matplotlib.pyplot as plt
+df = pd.read_csv("result.csv")       # 讀取 CSV
+df.columns = ["時間", "價格"]         # 設定欄位名稱
+df["時間"] = pd.to_datetime(df["時間"]) # 文字 → datetime 型別
+df["價格"] = df["價格"].astype(float)  # 文字 → 數字
+df["漲跌"] = df["價格"].diff()         # 新增欄位：每筆與前筆的差值
+print(df.dtypes)                      # 確認每欄的型別
 ```
-- 套件命名簡稱，之後打 `pd` / `plt` 就好
 
----
+### savefig vs show
 
-```python
-df = pd.read_csv("result.csv")
-```
-- 把 CSV 讀進來，存成 DataFrame（`df`）
-- DataFrame = 像 Excel 工作表，有欄有列
+| 動作 | 結果 |
+|------|------|
+| `plt.savefig("chart.png")` | 存檔，不跳出視窗 |
+| `plt.show()` | 跳出視窗，不存檔 |
+| 兩個都寫 | 跳出視窗，也存檔 |
 
----
+`dpi` = 解析度，預設 100，`dpi=150` 輸出更清晰
 
-```python
-df.columns = ["時間", "價格"]
-```
-- 設定兩個欄位的名稱
-- 之後才能用 `df["價格"]` 來指定那一欄
-
----
-
-```python
-df["價格"] = df["價格"].astype(float)
-```
-- CSV 讀進來的數字預設是**文字格式**
-- `astype(float)` 轉成小數點數字，才能拿來畫圖和計算
-
-| 原本 | 轉換後 |
-|------|--------|
-| `"84321.5"`（文字）| `84321.5`（數字）|
-
----
-
-```python
-df.plot(x="時間", y="價格", title="BTC Price Over Time")
-```
-- 畫折線圖，`x=` 橫軸、`y=` 縱軸、`title=` 標題
-
----
-
-```python
-plt.tight_layout()
-```
-- 自動縮小間距，讓標題和軸標籤不被邊界切掉
-
----
-
-```python
-plt.savefig("btc_chart.png")
-```
-- 存成圖檔，副檔名決定格式
+### savefig 格式
 
 | 格式 | 適合用在 |
 |------|---------|
 | PNG | 一般截圖、報告、網頁 |
 | PDF | 印刷、正式文件 |
-| SVG | 需要縮放的場合（簡報、UI）|
-| JPG | 照片類，圖表通常不用 |
+| SVG | 需要縮放的場合 |
 
-> `plt.show()` = 跳出視窗；`plt.savefig()` = 存檔不跳窗；兩個都寫 = 跳窗也存檔
-
----
-
-```python
-print("圖表已儲存為 btc_chart.png")
-```
-- 程式跑完後印出確認訊息
-
----
-
-## 時間格式：strftime
-
-```python
-# 原本（有小數秒數）
-datetime.now()
-# → 2026-03-23 10:17:37.961105
-
-# 修正後
-datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-# → 2026-03-23 10:17:37
-```
+### strftime 格式碼
 
 | 格式碼 | 意思 | 範例 |
 |--------|------|------|
 | `%Y` | 四位數年份 | `2026` |
-| `%m` | 月份 | `03` |
+| `%m` | 月份數字 | `03` |
+| `%b` | 月份縮寫 | `Mar` |
 | `%d` | 日期 | `23` |
 | `%H` | 小時（24h）| `10` |
 | `%M` | 分鐘 | `17` |
 | `%S` | 秒數 | `37` |
-
----
-
-## schedule 啟動沒有動作
-
-**原因：** 預設要等滿設定的時間才第一次執行
-
-**修正：** 啟動前先手動呼叫一次 `job()`
-
 ```python
-job()  # 立刻執行一次
+datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # → 2026-03-23 10:17:37
+datetime.now().strftime("%d %b %Y")            # → 23 Mar 2026
+```
 
+### schedule 啟動沒有動作
+
+預設要等滿設定時間才第一次執行，修正：在 `while True` 前先呼叫一次 `job()`
+```python
+job()
 schedule.every(5).minutes.do(job)
-
 while True:
     schedule.run_pending()
     time.sleep(1)
-```
-
----
-
-## 今日整體流程
-
-```
-result.csv → 讀進 df → 欄位命名 → 數字轉型 → 畫圖 → 存檔
 ```
