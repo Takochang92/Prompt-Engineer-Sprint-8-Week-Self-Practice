@@ -35,7 +35,7 @@ def job():
 
     with open("result.csv", "a", newline="") as f:
       writer = csv.writer(f)
-      writer.writerow([datetime.now().strftime("%Y-%M-%D %H:%M:%S"), price])
+      writer.writerow([datetime.now().strftime("%d %b %Y %H:%M"), price])
 
     logging.info(f"完成！價格：{price}")
 
