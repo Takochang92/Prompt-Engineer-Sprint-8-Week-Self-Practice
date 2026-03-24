@@ -1,9 +1,16 @@
+from dotenv import load_dotenv
+import os
 import schedule
 import time
 import requests
 import csv
 import logging
 from datetime import datetime
+
+load_dotenv()
+url = os.getenv("API_URL")
+interval = int(os.getenv("FETCH_INTERVAL"))
+
 
 
 logging.basicConfig(
@@ -23,8 +30,6 @@ last_price = None
 
 def job():
   global last_price
-
-  url = "https://api.coinbase.com/v2/prices/BTC-USD/spot"
 
   try:
     response = requests.get(url, timeout=10)
@@ -56,7 +61,7 @@ def job():
 
 job()
 
-schedule.every(5).minutes.do(job)
+schedule.every(interval).minutes.do(job)
 
 while True:
   schedule.run_pending()
