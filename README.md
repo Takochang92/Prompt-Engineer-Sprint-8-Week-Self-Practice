@@ -65,3 +65,10 @@ A hands-on 8-week self-training project building toward a Junior Prompt Engineer
 - Learned difference between `savefig()` and `show()`
 - Learned `strftime()` format codes including `%b` for month abbreviation
 - Fixed `schedule` not running on startup by calling `job()` once before the loop
+
+### Week 1 — Day 5
+- Installed `python-dotenv` to manage configuration via `.env` file
+- Moved API URL and fetch interval out of source code into `.env`
+- Added `.env` to `.gitignore` to prevent secrets from being pushed to GitHub
+- Learned that environment variables should be read once at startup, not inside the job function
+- Understood Python's top-to-bottom execution rule: define before use

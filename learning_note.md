@@ -265,3 +265,80 @@ while True:
     schedule.run_pending()
     time.sleep(1)
 ```
+
+---
+ 
+## Week 1 · Day 5
+ 
+### dotenv — 環境變數管理
+ 
+```bash
+pip3 install python-dotenv
+```
+ 
+```python
+from dotenv import load_dotenv
+import os
+ 
+load_dotenv()               # 讀取 .env 檔案
+url = os.getenv("API_URL")  # 取得環境變數的值
+```
+ 
+### .env 檔案格式
+ 
+```
+API_URL=https://api.coinbase.com/v2/prices/BTC-USD/spot
+FETCH_INTERVAL=5
+```
+ 
+- 純文字格式，`KEY=VALUE`，不加引號
+- 只存在本機，**不推上 GitHub**
+ 
+### .gitignore — 擋住不該上傳的檔案
+ 
+```
+.env
+week1/venv/
+__pycache__/
+```
+ 
+- `.env` 放這裡，Git 就看不到它，永遠不會被 commit
+ 
+### 為什麼要用 .env？
+ 
+| 方式 | 風險 |
+|------|------|
+| 寫死在程式碼裡 | 推上 GitHub 就公開了，任何人都能看到 API 金鑰 |
+| 放在 `.env` | 只存在本機，程式從外部讀取，原始碼保持乾淨 |
+ 
+就像把家門鑰匙放在保險箱，而不是刻在門上。
+ 
+### Python 執行順序規則
+ 
+> 先定義，再使用。函式要寫在被呼叫之前。
+ 
+```python
+# ❌ 錯誤：job 還沒定義就被登記
+schedule.every(5).minutes.do(job)
+def job():
+    ...
+ 
+# ✅ 正確：先定義 job，再登記
+def job():
+    ...
+schedule.every(5).minutes.do(job)
+```
+ 
+### 設定值應該放在哪裡？
+ 
+```python
+load_dotenv()
+url = os.getenv("API_URL")        # ✅ 放在 job() 外面，只讀一次
+interval = int(os.getenv("FETCH_INTERVAL"))
+ 
+def job():
+    # url 直接使用，不需要在函式裡重新讀取
+    response = requests.get(url, timeout=10)
+```
+ 
+- 設定值在程式啟動時讀取一次即可，不需要每次呼叫 `job()` 都重新讀
